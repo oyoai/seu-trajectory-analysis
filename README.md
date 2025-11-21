@@ -17,7 +17,7 @@ The SEU (Scaled Evaluation Unit) is a prototype developed to reproduce the curvi
 <div align="center">
   <img src="/Media/seu.png" 
        alt="SEU Rolling Robot" 
-       width="430">
+       width="630">
   <br>
   <em>Figure 1 — SEU rolling robot prototype</em>
 </div>

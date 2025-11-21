@@ -90,7 +90,7 @@ Utilities for curvature estimation and curvity related analysis.
 
 
 ## Output Data
-Tthe cleaned, structured datasets produced and used throughout the analysis.
+The cleaned, structured datasets produced and used throughout the analysis.
 
 ### 1. [`all_trials.csv`](Data/Trajectories/all_trials.csv)  
 Per-frame reconstructed trajectories for every trial.

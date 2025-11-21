@@ -4,7 +4,7 @@
 
 **Author:** Offir Olivkovich
 
-**Supervisor:** [Dr. Matan Yah Ben Zion](https://www.mybz.org/))
+**Supervisor:** [Dr. Matan Yah Ben Zion](https://www.mybz.org/)
 
 ---
 

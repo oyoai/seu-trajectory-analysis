@@ -1,98 +1,157 @@
-SEU TRAJECTORY ANALYSIS
----------------------------------
-Author: Offir Olivkovich
-Bachelor Thesis Project
-Supervisor: Matan Yah Ben Zion
-2025
----------------------------------
+# SEU Trajectory Analysis
 
-This project contains all code, data processing steps, and analysis used to
-extract and analyze the trajectories of the SEU rolling robot prototype.
+**Developed as part of my Bachelor’s Thesis Project (2025).**  
+Author: Offir Olivkovich  
+Supervisor: Matan Yah Ben Zion  
 
-Project structure:
+---
 
-seu-trajectory-analysis
-  notebooks
-    extract_trajectories.ipynb   main analysis notebook
-  code
-    extract_trajectory.py        video-to-trajectory extraction
-    compute_features.py          computation of trial-level features
-    estimate_kappa.py            curvature estimation utilities
-  data
-    videos                       raw videos (not included in the repository)
-      flat
-      incline
-    trajectories
-      all_trials.csv             per-frame trajectories for all trials
-    features
-      features.csv               trial-level feature summaries
-  requirements.txt
-  README.txt
+## Overview
 
+This repository contains the complete analysis pipeline used to extract, clean, and analyze trajectories from the SEU rolling-robot experiments.  
+The project investigates whether simple mechanical configurations—mass placement, wheel orientation, and starting side—can encode directional behavior in a rolling robot **without onboard computation**.
 
-Pipeline overview:
+The workflow includes:
 
-1. Trajectory extraction
-   Raw videos are processed to extract (x, y) positions for every frame.
-   The output file "data/trajectories/all_trials.csv" contains:
-     - frame index
-     - x and y position
-     - trial id
-     - condition (flat or incline)
-     - position of the mass (front or back)
-     - wheel orientation (normal or flipped) or starting side
+- converting raw videos → per-frame trajectories  
+- computing trial-level kinematic features  
+- aggregating results across configurations  
+- generating plots and summaries for flat and incline conditions  
 
-2. Feature computation
-   Each trial is summarized using "summarize_all_trials" into numerical
-   features describing motion behavior. The output file
-   "data/features/features.csv" contains:
-     - mean and standard deviation of velocity
-     - mean and standard deviation of acceleration
-     - startup acceleration
-     - displacement
-     - directional bias
-     - optional curvature metrics
-     - metadata (trial, condition, position, orientation)
+All outputs are saved as structured CSV files to ensure reproducibility and enable downstream analysis.
 
-3. Aggregation and visualization
-   Trial-level features are grouped and summarized to produce:
-     group_summary_flat
-     group_summary_incline
-   These tables describe how mechanical configurations affect the robot's
-   motion.
-   Additional visualizations include:
-     - raw trajectory plots
-     - grouped trajectory comparisons
-     - feature distributions and comparisons
+---
 
+## Repository Structure
 
-Environment setup:
+```
+seu-trajectory-analysis/
+│
+├── notebooks/
+│   └── extract_trajectories_and_features.ipynb    # main analysis notebook
+│
+├── code/
+│   ├── extract_trajectory.py       # video → trajectory extraction
+│   ├── compute_features.py         # trial-level feature computation
+│   └── estimate_kappa.py           # curvature estimation tools
+│
+├── data/
+│   ├── videos/                     # raw videos (not included in repo)
+│   │    ├── flat/
+│   │    └── incline/
+│   ├── trajectories/
+│   │    └── all_trials.csv         # per-frame trajectory dataset
+│   └── features/
+│        └── features.csv           # trial-level feature summary
+│
+├── requirements.txt
+└── README.md
+```
 
-1. Create and activate a virtual environment:
-     python -m venv .venv
-     .\.venv\Scripts\activate
+---
 
-2. Install dependencies:
-     pip install -r requirements.txt
+## Pipeline Overview
 
-3. Launch Jupyter Lab:
-     python -m jupyter lab
-   Then open "notebooks/extract_trajectories.ipynb".
+### **1. Trajectory Extraction**
 
+Videos are processed frame-by-frame to reconstruct the robot’s 2D motion.  
+The resulting dataset (`data/trajectories/all_trials.csv`) includes:
 
-Outputs produced:
+- frame index  
+- x, y coordinates  
+- trial ID  
+- condition (flat / incline)  
+- mass position (front / back)  
+- wheel orientation (normal / flipped) or starting side (left / right)
 
-- data/trajectories/all_trials.csv
-    per-frame positions for every trial
+---
 
-- data/features/features.csv
-    trial-level summary statistics
+### **2. Feature Computation**
 
-- group_summary_flat
-- group_summary_incline
-    aggregated feature tables (created inside the notebook)
+Each trial is summarized into quantitative kinematic features stored in  
+`data/features/features.csv`.
 
-- multiple visualization plots created during analysis
+Computed features include:
 
+- **velocity**: mean, variability  
+- **acceleration**: mean, variability  
+- **startup acceleration**  
+- **trajectory displacement**  
+- **directional bias**  
+- optional curvature estimation  
+- full experimental metadata
 
+---
+
+### **3. Aggregation & Visualization**
+
+The notebook also produces:
+
+- `group_summary_flat` — aggregated statistics for flat trials  
+- `group_summary_incline` — aggregated statistics for incline trials  
+
+And generates:
+
+- raw trajectory plots  
+- grouped comparison views  
+- feature distribution plots  
+- incline behavior visualizations  
+
+These outputs allow qualitative and quantitative comparison of the robot’s behavior under different mechanical configurations.
+
+---
+
+## Environment Setup
+
+### **1. Create and activate a virtual environment**
+```bash
+python -m venv .venv
+.\.venv\Scripts\activate
+```
+
+### **2. Install dependencies**
+```bash
+pip install -r requirements.txt
+```
+
+### **3. Launch Jupyter Lab**
+```bash
+python -m jupyter lab
+```
+
+Open the main analysis notebook:
+
+```
+notebooks/extract_trajectories_and_features.ipynb
+```
+
+---
+
+## Output Files
+
+### **Trajectory-level data**
+`data/trajectories/all_trials.csv`  
+Contains per-frame (x, y) positions + metadata.
+
+### **Feature-level data**
+`data/features/features.csv`  
+Contains trial-level kinematic summaries.
+
+### **Aggregated summaries**
+Generated inside the notebook:
+
+- `group_summary_flat`  
+- `group_summary_incline`
+
+### **Figures**
+All trajectory and feature plots produced during analysis.
+
+---
+
+## Notes
+
+- Raw videos are **not stored** in the repository due to size, but the folder structure is preserved.  
+- The notebook is fully re-runnable once the videos are placed in `data/videos/flat` and `data/videos/incline`.  
+
+---
 

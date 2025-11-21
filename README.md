@@ -15,7 +15,7 @@ This repository documents one of several prototypes developed as part of a broad
 The SEU (Scaled Evaluation Unit) is a prototype developed to reproduce the curvity-driven behaviors seen in vibration-based robots (see [Ben Zion et al. (2023) ](...)), adapting them to a rolling locomotion framework.
 
 <div align="center">
-  <img src="/mnt/Media/seu.png" 
+  <img src="/Media/seu.png" 
        alt="SEU Rolling Robot" 
        width="430">
   <br>

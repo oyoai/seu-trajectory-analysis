@@ -1,157 +1,109 @@
-# SEU Trajectory Analysis
+# **SEU Trajectory Analysis**
 
-**Developed as part of my Bachelor’s Thesis Project (2025).**  
-Author: Offir Olivkovich  
-Supervisor: Matan Yah Ben Zion  
+### *Bachelor Thesis Project — 2025*
 
----
+**Author:** Offir Olivkovich
 
-## Overview
-
-This repository contains the complete analysis pipeline used to extract, clean, and analyze trajectories from the SEU rolling-robot experiments.  
-The project investigates whether simple mechanical configurations—mass placement, wheel orientation, and starting side—can encode directional behavior in a rolling robot **without onboard computation**.
-
-The workflow includes:
-
-- converting raw videos → per-frame trajectories  
-- computing trial-level kinematic features  
-- aggregating results across configurations  
-- generating plots and summaries for flat and incline conditions  
-
-All outputs are saved as structured CSV files to ensure reproducibility and enable downstream analysis.
+**Supervisor:** Matan Yah Ben Zion
 
 ---
 
-## Repository Structure
+## Background
+
+This repository documents one of several prototypes developed as part of a broader research effort investigating curvity (κ)—a geometric property introduced in the work of Matan Yah Ben Zion. Curvity quantifies how quickly a body turns when a force is applied, that is, the rate at which the heading angle changes in response to an external force. Differences in an individual robot’s curvity can accumulate at the swarm level, causing large-scale shifts in collective behavior (see [Casiulis et al., 2024](...)). Remarkably, all of these effects emerge without any active control.
+
+The SEU (Scaled Evaluation Unit) is a prototype developed to reproduce the curvity-driven behaviors seen in vibration-based robots (see [Ben Zion et al. (2023) ](...)), adapting them to a rolling locomotion framework.
+
+<div align="center">
+  <img src="/mnt/Media/seu.png" 
+       alt="SEU Rolling Robot" 
+       width="430">
+  <br>
+  <em>Figure 1 — SEU rolling robot prototype</em>
+</div>
+
+To study how curvity-based behavior manifests in a real prototype, the SEU robot was filmed across two environments: a flat surface (control), and an inclined surface (with gravity acting as the force).
+
+The goal of this analysis is to:
+
+* extract accurate, per-frame trajectories from the raw videos
+* compute kinematic features (velocity, acceleration, displacement, directional bias)
+* compare configurations to evaluate whether mass placement produces **consistent, engineered behavior**
+* create a clean, reproducible analysis pipeline for future curvature-based rolling robot studies
+
+---
+
+## Project Structure
 
 ```
 seu-trajectory-analysis/
 │
-├── notebooks/
-│   └── extract_trajectories_and_features.ipynb    # main analysis notebook
+├── Code/                         # helper modules for tracking & feature extraction
+│   ├── extract_trajectory.py
+│   ├── compute_features.py
+│   └── estimate_kappa.py
 │
-├── code/
-│   ├── extract_trajectory.py       # video → trajectory extraction
-│   ├── compute_features.py         # trial-level feature computation
-│   └── estimate_kappa.py           # curvature estimation tools
+├── Data/
+│   ├── Trajectories/             # exported per-frame trajectories (CSV)
+│   └── Features/                 # trial-level feature tables (CSV)
 │
-├── data/
-│   ├── videos/                     # raw videos (not included in repo)
-│   │    ├── flat/
-│   │    └── incline/
-│   ├── trajectories/
-│   │    └── all_trials.csv         # per-frame trajectory dataset
-│   └── features/
-│        └── features.csv           # trial-level feature summary
+├── Notebooks/
+│   └── extract_trajectories_and_features.ipynb  # first analysis notebook
+│   └── first_trial_kappa.ipynb                  # second analysis notebook
 │
-├── requirements.txt
-└── README.md
+├── Media/                        # images (e.g., SEU model photo)
+│
+├── README.md
+└── requirements.txt
 ```
 
----
-
-## Pipeline Overview
-
-### **1. Trajectory Extraction**
-
-Videos are processed frame-by-frame to reconstruct the robot’s 2D motion.  
-The resulting dataset (`data/trajectories/all_trials.csv`) includes:
-
-- frame index  
-- x, y coordinates  
-- trial ID  
-- condition (flat / incline)  
-- mass position (front / back)  
-- wheel orientation (normal / flipped) or starting side (left / right)
+> **Note:**
+> Raw video recordings are excluded from the repository because they exceed practical storage limits.
 
 ---
 
-### **2. Feature Computation**
+## How to Explore This Repository
 
-Each trial is summarized into quantitative kinematic features stored in  
-`data/features/features.csv`.
+This repository is not intended as an install-and-run software package.
+Its purpose is to document the processing pipeline, analysis logic, and intermediate datasets used in the SEU trajectory analysis component of my bachelor’s thesis.
 
-Computed features include:
+If you are viewing this repository, the most important materials are:
 
-- **velocity**: mean, variability  
-- **acceleration**: mean, variability  
-- **startup acceleration**  
-- **trajectory displacement**  
-- **directional bias**  
-- optional curvature estimation  
-- full experimental metadata
+## Notebooks:
 
----
+### 1. [`extract_trajectories_and_features.ipynb`](Notebooks/extract_trajectories_and_features.ipynb)
+The main analysis notebook. It contains the full trajectory extraction pipeline, feature computation, visualizations of all flat and incline configurations and full documentation of this process. The resulting datasets are used for downstream analysis.
 
-### **3. Aggregation & Visualization**
+### 2. [`calculate_curvity.ipynb`](Notebooks/calculate_curvity.ipynb)
+This notebook performs the curvity-related analysis, connecting the extracted trajectories to the theoretical framework from Matan Yah Ben Zion’s research.
 
-The notebook also produces:
+## Scripts:
 
-- `group_summary_flat` — aggregated statistics for flat trials  
-- `group_summary_incline` — aggregated statistics for incline trials  
+### 1. [`extract_trajectory.py`](Code/extract_trajectory.py)  
+Converts raw videos into per-frame trajectories using frame differencing and bounding-box tracking.
 
-And generates:
+### 2. [`compute_features.py`](Code/compute_features.py)  
+Computes trial-level kinematic metrics (velocity, acceleration, displacement, directional bias).
 
-- raw trajectory plots  
-- grouped comparison views  
-- feature distribution plots  
-- incline behavior visualizations  
+### 3. [`estimate_kappa.py`](Code/estimate_kappa.py)  
+Utilities for curvature estimation and curvity related analysis.
 
-These outputs allow qualitative and quantitative comparison of the robot’s behavior under different mechanical configurations.
 
----
+## Output Data
+Tthe cleaned, structured datasets produced and used throughout the analysis.
 
-## Environment Setup
+### 1. [`all_trials.csv`](Data/Trajectories/all_trials.csv)  
+Per-frame reconstructed trajectories for every trial.
 
-### **1. Create and activate a virtual environment**
-```bash
-python -m venv .venv
-.\.venv\Scripts\activate
-```
-
-### **2. Install dependencies**
-```bash
-pip install -r requirements.txt
-```
-
-### **3. Launch Jupyter Lab**
-```bash
-python -m jupyter lab
-```
-
-Open the main analysis notebook:
-
-```
-notebooks/extract_trajectories_and_features.ipynb
-```
+### 2. [`features.csv`](Data/Features/features.csv)  
+Trial-level summary metrics derived from the trajectories.
 
 ---
 
-## Output Files
 
-### **Trajectory-level data**
-`data/trajectories/all_trials.csv`  
-Contains per-frame (x, y) positions + metadata.
 
-### **Feature-level data**
-`data/features/features.csv`  
-Contains trial-level kinematic summaries.
 
-### **Aggregated summaries**
-Generated inside the notebook:
-
-- `group_summary_flat`  
-- `group_summary_incline`
-
-### **Figures**
-All trajectory and feature plots produced during analysis.
-
----
-
-## Notes
-
-- Raw videos are **not stored** in the repository due to size, but the folder structure is preserved.  
-- The notebook is fully re-runnable once the videos are placed in `data/videos/flat` and `data/videos/incline`.  
-
----
+>#### Purpose of This Repository
+> <em>This repository documents how the dataset used in the thesis was generated, provides reproducible code for verification, serves as a companion to the written thesis, and illustrates SEU’s behavior across different configurations.  
+> It is <strong>not</strong> intended as a pip-installable package or general-purpose library.</em>
 

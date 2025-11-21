@@ -12,7 +12,7 @@
 
 This repository documents one of several prototypes developed as part of a broader research effort investigating curvity (κ)—a geometric property introduced in the work of [Dr. Matan Yah Ben Zion](https://www.mybz.org/)). Curvity quantifies how quickly a body turns when a force is applied, that is, the rate at which the heading angle changes in response to an external force. Differences in an individual robot’s curvity can accumulate at the swarm level, causing large-scale shifts in collective behavior (see [Casiulis et al., 2024](...)). Remarkably, all of these effects emerge without any active control.
 
-The SEU (Scaled Evaluation Unit) is a prototype developed to reproduce the curvity-driven behaviors seen in vibration-based robots (see [Ben Zion et al. (2023) ](...)), adapting them to a rolling locomotion framework.
+The SEU (Scaled Evaluation Unit) is a prototype developed to reproduce the curvity-driven behaviors seen in vibration-based robots (see [Ben Zion et al. (2023)](...)), adapting them to a rolling locomotion framework.
 
 <div align="center">
   <img src="/Media/seu.png" 
